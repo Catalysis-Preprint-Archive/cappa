@@ -1,37 +1,39 @@
 #+TITLE: Catalysis Preprint Archive
 
-A project to make installable preprints of scientific articles. The initial focus is on Catalysis related articles.
+A project to make installable preprints of scientific articles. The initial focus is on Catalysis related articles. See http://catalysis-preprint-archive.github.io/cappa/.
 
 
 To access the CaPPA archive in Emacs add this to an init file.
 
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'package-archives
-	     '("cappa" . "http://kitchingroup.cheme.cmu.edu/elpa/") t)
+	     '("cappa" . "http://catalysis-preprint-archive.github.io/cappa/preprints") t)
 #+END_SRC
 
+* Install CaPPA
 
+#+BEGIN_SRC emacs-lisp
+(require 'cappa)
+#+END_SRC
+
+* Submit a preprint
+
+This is a work in progress. You can fork our fork of Melpa: https://github.com/Catalysis-Preprint-Archive/melpa (the cappa branch).
+
+and submit a recipe pull request.
 
 * Work in progress
 
 ** Get available preprints
 #+BEGIN_SRC emacs-lisp
-(defun cappa-available-preprints ()
-  "Return list of available preprints."
-  (let ((data (with-current-buffer
-		  (url-retrieve-synchronously
-		   "https://raw.githubusercontent.com/jkitchin/jkitchin.github.com/master/elpa/archive-contents")
-		(goto-char url-http-end-of-headers)
-		(read (current-buffer)))))
-    (cdr data)))
-
 (loop for (pp . metadata) in  (cappa-available-preprints)
       collect (list pp metadata))
 #+END_SRC
 
 #+RESULTS:
-| kitchingroup-43 | [(20160130 1058) ((cappa (0))) preprint doi:10.1007/s11244-013-0166-3 tar ((:authors (John Kitchin . jkitchin@andrew.cmu.edu)) (:maintainer John Kitchin . jkitchin@andrew.cmu.edu))] |
-| cappa           | [(20160130 1058) nil Catalysis Preprint Archive single ((:authors (John Kitchin . jkitchin@andrew.cmu.edu)) (:maintainer John Kitchin . jkitchin@andrew.cmu.edu))]                    |
+| kitchingroup-57 | [(20160130 1457) ((cappa (0))) preprint http://dx.doi.org/10.1021/acscatal.5b00538. tar ((:authors (John Kitchin . jkitchin@andrew.cmu.edu)) (:maintainer John Kitchin . jkitchin@andrew.cmu.edu))] |
+| kitchingroup-43 | [(20160130 1457) ((cappa (0))) preprint doi:10.1007/s11244-013-0166-3 tar ((:authors (John Kitchin . jkitchin@andrew.cmu.edu)) (:maintainer John Kitchin . jkitchin@andrew.cmu.edu))]               |
+| cappa           | [(20160130 1058) nil Catalysis Preprint Archive single ((:authors (John Kitchin . jkitchin@andrew.cmu.edu)) (:maintainer John Kitchin . jkitchin@andrew.cmu.edu))]                                  |
 
 ** List installed preprints
 #+BEGIN_SRC emacs-lisp
