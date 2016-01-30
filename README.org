@@ -1,6 +1,8 @@
 #+TITLE: Catalysis Preprint Archive
 
-A project to make installable preprints of scientific articles. The initial focus is on Catalysis related articles. See http://catalysis-preprint-archive.github.io/cappa/.
+A project to make installable preprints of scientific articles. The initial focus is on Catalysis related articles, but the approach is general to all preprints.
+
+See http://catalysis-preprint-archive.github.io/cappa/.
 
 
 To access the CaPPA archive in Emacs add this to an init file.
