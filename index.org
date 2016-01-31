@@ -1,9 +1,34 @@
-#+TITLE: test
+#+TITLE: CaPPA - The Catalysis Preprint Archive
+#+author: John Kitchin
+#+options: toc:nil
 
-* section 1
 
-** subsection
+* About CaPPA
+The Catalysis Preprint Archive provides access to preprints of published papers in the field of catalysis. The goal is to provide a curated, aggregated repository of the preprints, prepared by the authors. These repositories will ideally contain:
+- README.org :: A description of the preprint repository
+- manuscript source file :: A LaTeX, org-mode, or MS Word document, and files required to build it.
+- supporting information :: Data and analysis files
 
-text
+CaPPA is accessible through this site, through Emacs, and eventually through Python and Ruby.
 
-| tet | 6 |
+
+* Available preprints
+
+#+BEGIN_SRC emacs-lisp :exports results
+(loop for (label . props) in (package-build-archive-alist)
+      collect (list
+	       (format "[[./preprints/%s-%s.%s.html][%s]]"
+		       label
+		       (nth 0 (elt props 0))
+		       (nth 1 (elt props 0))
+		       label)
+		       (elt props 2)))
+#+END_SRC
+
+* Submitting a preprint
+The basic process to submit a preprint to CaPPA is to create a preprint repository (e.g. https://github.com/KitchinHUB/kitchingroup-57). Then, send a "recipe" file (e.g. https://github.com/Catalysis-Preprint-Archive/melpa/blob/cappa/recipes/kitchingroup-57) to jkitchin@andrew.cmu.edu.
+
+I am working on streamlining this process.
+
+* Interested in developing?
+You can access data about the archives here [[./archives.json]] and the recipes at [[./recipes.json]]. You can build a library in Python or Ruby to access everything from those I think. Let me know if you do that or want help doing it.
