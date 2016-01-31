@@ -13,6 +13,14 @@
     <description>News about package updates</description>
     
       <item>
+        <title>kitchingroup-9 (20160131.1150) --- preprint</title>
+        <description>The kitchingroup-9 package in MELPA has been updated to version 20160131.1150.</description>
+        <pubDate>Sun, 31 Jan 2016 11:50:00 -0500</pubDate>
+        <guid isPermaLink="true">https://melpa.org/packages/kitchingroup-9-20160131.1150.tar</guid>
+        <link>https://melpa.org/#/kitchingroup-9</link>
+      </item>
+    
+      <item>
         <title>kitchingroup-57 (20160131.1005) --- preprint http://dx.doi.org/10.1021/acscatal.5b00538.</title>
         <description>The kitchingroup-57 package in MELPA has been updated to version 20160131.1005.</description>
         <pubDate>Sun, 31 Jan 2016 10:05:00 -0500</pubDate>
