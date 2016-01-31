@@ -9,10 +9,13 @@ The Catalysis Preprint Archive provides access to preprints of published papers 
 - manuscript source file :: A LaTeX, org-mode, or MS Word document, and files required to build it.
 - supporting information :: Data and analysis files
 
+Our goal is to make sharing our work and data as easy as possible.
+
 CaPPA is accessible through this site, through Emacs, and eventually through Python and Ruby.
 
 
 * Available preprints
+Each link below will take you to the preprint page, which has more information about the preprint.
 
 #+BEGIN_SRC emacs-lisp :exports results
 (loop for (label . props) in (package-build-archive-alist)
