@@ -2,7 +2,7 @@
 
 A project to make installable preprints of scientific articles. The initial focus is on Catalysis related articles, but the approach is general to all preprints.
 
-See http://catalysis-preprint-archive.github.io/cappa/.
+See http://catalysis-preprint-archive.github.io/.
 
 
 To access the CaPPA archive in Emacs add this to an init file.
@@ -23,6 +23,9 @@ To access the CaPPA archive in Emacs add this to an init file.
 This is a work in progress. You can fork our fork of Melpa: https://github.com/Catalysis-Preprint-Archive/melpa (the cappa branch).
 
 and submit a recipe pull request.
+
+* Things TODO
+** TODO Travis CI testing
 
 * Work in progress
 
