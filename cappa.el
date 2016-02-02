@@ -1,4 +1,4 @@
-;;; cappa.el --- Catalysis Preprint Archive          -*- lexical-binding: t; -*-
+;;; cappa.el --- Catalysis Preprint Archive interface          -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2016  John Kitchin
 
@@ -24,23 +24,23 @@
 ;; This package provides functions to interact with the Catalysis Preprint
 ;; Archive.
 
-;; When you install a preprint, it will be registered so you can easily find it
-;; and open it.
-
-
 ;;; Code:
 
 (defvar cappa-repo
   "http://catalysis-preprint-archive.github.io/preprints/"
-  "URL to the preprint archive.")
+  "URL to the preprint archive for Emacs.")
+
 
 (add-to-list 'package-archives (cons "CaPPA" cappa-repo) t)
+
 
 (defvar cappa-preprints '()
   "Contains a list of installed preprints.")
 
+
 (defun cappa-register (preprint-label &rest args)
-  "Register the symbol PREPRINT-LABEL in `cappa-preprints'."
+  "Register the symbol PREPRINT-LABEL in `cappa-preprints'.
+Optional argument ARGS contain any information you want available in `cappa-preprints'."
   (add-to-list 'cappa-preprints (cons preprint-label args)))
 
 
@@ -66,7 +66,9 @@ Returns a list of (cons label properties)."
 	 (format "%s | %s" label (elt properties 0))
 	 (cons label properties))))
 
+
 (defun helm-cappa-installed-candidates ()
+  "Return a list of installed preprints."
   (loop for (label . properties) in (cappa-available-preprints)
 	if (package-installed-p label)
 	collect
@@ -83,18 +85,25 @@ Returns a list of (cons label properties)."
 	       (expand-file-name
 		"README.org"
 		(file-name-directory
-		 (locate-library (symbol-name 'kitchingroup-9)))))))
+		 (locate-library (symbol-name (car entry))))))))
   "Helm source for installed preprints.")
+
+
+(defun helm-cappa-install-preprint (candidate)
+  "Install the preprint selected in the function `helm-marked-candidates'.
+CANDIDATE is ignored."
+  (loop for preprint in (helm-marked-candidates)
+	do
+	(package-install (car preprint))))
 
 
 (defvar helm-cappa-available-preprints
   (helm-build-sync-source "CaPPA available preprints"
     :candidates 'helm-cappa-candidates
-    :action (lambda (candidate)
-	      (package-install (car candidate))))
+    :action 'helm-cappa-install-preprint)
   "Helm source for preprints in CaPPA.
-TODO: remove installed packages from the list.
-Make updates apparent.")
+TODO: Make updates apparent.")
+
 
 (defvar helm-cappa-submit-preprint
   (helm-build-dummy-source "CaPPA submit preprint"
@@ -107,6 +116,7 @@ Make updates apparent.")
 				     (cappa-submit-preprint)))))
    "Helm source for submitting a preprint.")
 
+
 (defun cappa ()
   "Helm interface to CaPPA."
   (interactive)
@@ -115,7 +125,7 @@ Make updates apparent.")
 		   helm-cappa-submit-preprint)))
 
 
-;; * Submit a recipe
+;;* Submit a recipe
 (defun cappa-submit-preprint ()
   "Submit preprint to CaPPA.
 Works for github only right now."
