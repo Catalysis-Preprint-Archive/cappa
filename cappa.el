@@ -115,6 +115,103 @@ Make updates apparent.")
 		   helm-cappa-submit-preprint)))
 
 
+;; * Generate a recipe from a bibtex file
+(defun cappa-clean-bibtex-string (s)
+  "Clean a bibtex string S."
+  (setq s (replace-regexp-in-string "^{\\|}$" "" s))
+  (setq s (replace-regexp-in-string "[\n\\|\t\\|\s]+" " " s))
+  s)
+
+
+(defun cappa-bibtex-recipe ()
+  "Generate a package from the bibtex entry at point.
+This uses the key as the label for the preprint, and constructs
+the label.el file."
+  (interactive)
+  (bibtex-beginning-of-entry)
+  (let* ((bibtex-data (bibtex-parse-entry t))
+	 (bibtex-text )
+	 (label (cdr (assoc "=key=" bibtex-data)))
+	 (title (cappa-clean-bibtex-string (cdr (assoc "title" bibtex-data))))
+	 (doi (cdr (assoc "doi" bibtex-data)))
+	 (year (cdr (assoc "year" bibtex-data)))
+	 (journal (cdr (assoc "journal" bibtex-data)))
+	 (el-file (format "%s.el" label))
+	 bibtex authors)
+
+    ;; Get the actual bibtex text, and format it for the el file
+    (bibtex-copy-entry-as-kill)
+    (setq bibtex (with-temp-buffer
+		   (bibtex-yank)
+		   (goto-char (point-min))
+		   (while (not (eobp))
+		     (forward-line)
+		     (beginning-of-line)
+		     (insert ";;  ")
+		     (end-of-line))
+		   (buffer-string)))
+
+    ;; format the authors in the multiline form for the el file
+    (setq authors
+	  (with-temp-buffer
+	    (cl-loop for au in (split-string
+				(cappa-clean-bibtex-string
+				 (cdr (assoc "author" bibtex-data)))
+				" and ")
+		     do
+		     (insert (format "%s\n" au)))
+	    (goto-char (point-min))
+	    (while (not (eobp))
+	      (forward-line)
+	      (beginning-of-line)
+	      (insert ";;  ")
+	      (end-of-line))
+	    (buffer-string)))
+
+    ;; generate the el-file
+    (with-temp-file el-file
+      (insert
+       (s-format ";;; ${label}.el --- ${title}
+
+;; Copyright (C) ${current-year} ${submitter} ${email}
+
+;; Version: 0.0.1
+;; Author: ${authors}
+;; DOI: ${doi}
+;; Year: ${year}
+;; Journal: ${journal}
+;; Bibtex: ${bibtex}
+
+;;; Comentary:
+;; Generated on ${generation-date}
+;;; Code:
+\(require 'cappa)
+
+\(cappa-register '${label})
+
+\(provide '${label})
+;;; ${label}.el ends here"
+		 'aget
+		 `(("label" . ,(or label "no-label"))
+		   ("submitter" . ,(user-full-name))
+		   ("email" . ,(format "<%s>" user-mail-address))
+		   ("generation-date" . ,(current-time-string))
+		   ("title" . ,(or title "no title"))
+		   ("authors" . ,(or authors "no authors"))
+		   ("journal" . ,(or journal "no journal"))
+		   ("year" . ,year)
+		   ("doi" . ,(or doi "nodoi"))
+		   ("bibtex" . ,(or bibtex "no bibtex"))
+		   ("current-year" . ,(format "%s"
+					      (calendar-extract-year
+					       (calendar-current-date))))))))
+
+    ;; Now generating the recipe file is trickier. We could probe around for the
+    ;; info, in .git, .hg etc... or go interactive and prompt the user if we
+    ;; can't figure it out.
+    ))
+
+
 ;; * Submit a recipe
 (defun cappa-submit-preprint ()
   "Submit preprint to CaPPA.
