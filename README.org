@@ -1,28 +1,6 @@
 #+TITLE: Catalysis Preprint Archive
 
-A project to make installable preprints of scientific articles. The initial focus is on Catalysis related articles, but the approach is general to all preprints.
+A project to aggregate preprint archives.
 
 See http://catalysis-preprint-archive.github.io/.
 
-
-To access the CaPPA archive in Emacs add this to an init file.
-
-#+BEGIN_SRC emacs-lisp
-(add-to-list 'package-archives
-	     '("cappa" . "http://catalysis-preprint-archive.github.io/cappa/preprints") t)
-#+END_SRC
-
-* Install CaPPA
-
-#+BEGIN_SRC emacs-lisp
-(require 'cappa)
-#+END_SRC
-
-* Submit a preprint
-
-This is a work in progress. You can fork our fork of Melpa: https://github.com/Catalysis-Preprint-Archive/melpa (the cappa branch).
-
-and submit a recipe pull request.
-
-* Things TODO
-** TODO Travis CI testing
