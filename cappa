@@ -11,10 +11,17 @@ if not os.path.isdir('html'):
 parser = argparse.ArgumentParser()
 subparsers = parser.add_subparsers(title='subcommands',
                                    description='valid subcommands',
-                                   help='additional help', dest='command')
+                                   help='additional help',
+                                   dest='command')
 
 subparsers.add_parser('index')
 subparsers.add_parser('html')
+
+#TODO: subparsers.add_parser('rss')
+
+subparsers.add_parser('build')
+
+#TODO: subparsers.add_parser('deploy')
 
 args = parser.parse_args()
 
@@ -22,5 +29,9 @@ if args.command == 'index':
     make_index()
 
 elif args.command == 'html':
+    get_html_files()
+
+elif args.command == 'build':
+    make_index()
     get_html_files()
     
