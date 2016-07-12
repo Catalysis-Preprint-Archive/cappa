@@ -10,6 +10,22 @@ template_string = '''
 <body>
 <h1>
 Available Preprints
+
+<script>
+  (function() {
+    var cx = '002533177287215655227:3hwzazzcvog';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+
+
 </h1>
 <table border = "2" cellspacing = "0" cellpadding = "6">
     <thead>
@@ -39,11 +55,11 @@ def make_index():
     filenames = {}
     for filename in os.listdir('recipes'):
         path = 'recipes/' + filename
-        file_contents = read_bibtex_file(path)
+        file_contents = utils.read_bibtex_file(path)
         #returns a list of dictionaries for all bibtex entries in file
         parsed_file = bibtexparser.loads(file_contents)
         for entry in parsed_file.entries:
-            if check_valid_connection(entry['repo']):
+            if utils.check_valid_connection(entry['repo']):
                 recipes_list.append(entry)
                 filenames[entry['repo']] = filename
     template = Template(template_string)
