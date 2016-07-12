@@ -39,14 +39,17 @@ template_string = '''<html>
 
 
 def get_html_files():
+    if not os.path.isdir('html/preprints'):
+        os.makedirs('html/preprints')
     for filename in os.listdir('recipes'):
+        print ('preparing {} '.format (filename))
         path = 'recipes/' + filename
-        file_contents = read_bibtex_file(path)
+        file_contents = utils.read_bibtex_file(path)
         #returns a list of dictionaries for all bibtex entries in file
         parsed_file = bibtexparser.loads(file_contents)
         for entry in parsed_file.entries:
             template = Template(template_string)
-            if check_valid_connection(entry['repo']):
+            if utils.check_valid_connection(entry['repo']):
                 with open('html/preprints/%s.html'%filename, 'wt') as f:
                     f.write(template.render(bibtex_entry = entry, path = path,
                     citation = file_contents))
