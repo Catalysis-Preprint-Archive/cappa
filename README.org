@@ -1,6 +1,133 @@
-#+TITLE: Catalysis Preprint Archive
+#+TITLE: Cappa - The Catalysis Preprint Archive
 
-A project to aggregate preprint archives.
+A project to aggregate preprint archives of published articles.
 
 See http://catalysis-preprint-archive.github.io/.
 
+* Generating Cappa
+The cappa command will generate the html pages.
+#+BEGIN_SRC sh
+./cappa index
+./cappa html
+#+END_SRC
+
+
+* Things to do
+** Add google analytics to all the pages
+
+Add this html to the end (inside the </body> tag) of the templates.
+
+#+BEGIN_HTML
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+  try {
+  var pageTracker = _gat._getTracker("UA-73115520-1");
+  pageTracker._trackPageview();
+  } catch(err) {}
+</script>
+#+END_HTML
+
+** DONE Add a google custom search
+
+** Make the index table sortable
+
+Something like http://tablesorter.com/docs/
+
+** Add all the recipes for repos currently at http://catalysis-preprint-archive.github.io
+
+** Figure out a reasonable citation for the index table
+
+** Add scopus cited badge to html pages
+
+#+BEGIN_SRC python :results output html
+doi = '10.1063/1.1737365'
+
+html = ("<object height=\"50\" data=\"http://api.elsevier.com/content/abstract/citation-count?doi=" 
+        + doi 
+        + "&amp;httpAccept=image/jpeg&amp;apiKey=5cd06d8a7df3de986bf3d0cd9971a47c\"></object>")
+
+print(html)
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_HTML
+<object height="50" data="http://api.elsevier.com/content/abstract/citation-count?doi=10.1063/1.1737365&amp;httpAccept=image/jpeg&amp;apiKey=5cd06d8a7df3de986bf3d0cd9971a47c"></object>
+#+END_HTML
+
+** Add links to Web of science related and citing to html pages based off DOI
+
+Related articles
+#+BEGIN_SRC python :results output html
+doi = '10.1063/1.1737365'
+
+url = ("http://ws.isiknowledge.com/cps/openurl/service?url_ver=Z39.88-2004&rft_id=info%3Adoi%2F"
+       + doi
+       + "&svc_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Asch_svc&svc.related=yes")
+
+print("<a href=\"" + url + "\">related</a>")
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_HTML
+<a href="http://ws.isiknowledge.com/cps/openurl/service?url_ver=Z39.88-2004&rft_id=info%3Adoi%2F10.1021/avd&svc_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Asch_svc&svc.related=yes">related</a>
+#+END_HTML
+
+Citing articles
+
+#+BEGIN_SRC python :results output html exports both
+doi = '10.1063/1.1737365'
+
+url = ("http://ws.isiknowledge.com/cps/openurl/service?url_ver=Z39.88-2004&rft_id=info%3Adoi%2F"
+       + doi
+       + "&svc_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Asch_svc&svc.citing=yes")
+
+print("<a href=\"" + url + "\">citing</a>")
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_HTML
+<a href="http://ws.isiknowledge.com/cps/openurl/service?url_ver=Z39.88-2004&rft_id=info%3Adoi%2F10.1063/1.1737365&svc_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Asch_svc&svc.citing=yes">citing</a>
+#+END_HTML
+
+** Add links to download the bibtex file for each html page
+Also figure out if there is a python module to convert bibtex to RIS and provide a link to that
+
+** Generate an RSS feed
+Ideally it would only contain updates.
+
+** Generate a json datafile containing the preprint contents
+This should probably just be the recipe files for now, maybe a json of {key: bibtex-string}
+
+** Add disqus to the html pages
+
+#+BEGIN_HTML
+<div id=\"disqus_thread\"></div>
+<script>
+ /**
+ * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+ * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+ */
+ /*
+ var disqus_config = function () {
+ this.page.url = PAGE_URL; // Replace PAGE_URL with your page's canonical URL variable
+ this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+ };
+ */
+ (function() { // DON'T EDIT BELOW THIS LINE
+ var d = document, s = d.createElement('script');
+
+ s.src = '//cappa.disqus.com/embed.js';
+
+ s.setAttribute('data-timestamp', +new Date());
+ (d.head || d.body).appendChild(s);
+ })();
+</script>
+<noscript>Please enable JavaScript to view the <a href=\"https://disqus.com/?ref_noscript\" rel=\"nofollow\">comments powered by Disqus.</a></noscript>
+
+
+
+<script id=\"dsq-count-scr\" src=\"//cappa.disqus.com/count.js\" async></script>
+#+END_HTML
