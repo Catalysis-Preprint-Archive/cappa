@@ -1,7 +1,7 @@
 from mako.template import Template
 import bibtexparser
 import os
-import urllib2
+import utils
 
 template_string = '''
 <html>
@@ -33,17 +33,6 @@ Available Preprints
 </html>
 '''
 
-def read_bibtex_file(path):
-    with open(path) as bibtex_file:
-        contents = bibtex_file.read()
-    return contents
-
-def check_valid_connection(url):
-    try:
-        r = urllib2.urlopen(url)
-    except urllib2.URLERROR as e:
-        r = e
-    return r.code != 404
 
 def make_index():
     recipes_list = []
